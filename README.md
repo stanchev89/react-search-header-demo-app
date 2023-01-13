@@ -8,7 +8,7 @@ Key parts of this functionality:
 * useQueryParamState hook
 * useQuery (@tanstack React Query)
 
-Another topic is how could we optimise long data list rendering with our ViewportListRender 
+Another topic is how we can optimise the rendering of a long list of data with our ViewportListRender 
 custom component.
 
 ## Technologies used:
