@@ -1,6 +1,6 @@
 import { FullWidthColumnFlexbox, FlexBoxFullWidth } from '../boxes';
 import { Box, IconButton, MenuItem, Tooltip, useTheme } from '@mui/material';
-import { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import { ChangeEvent, useCallback, useState } from 'react';
 import { useDebounceCallback } from '../../../hooks/useDebounceCallback';
 import { Backspace, FilterList } from '@mui/icons-material';
 import { ISearchHeaderProps } from '../../../interfaces/searchHeaderProps';
@@ -8,7 +8,6 @@ import { BaseObj } from '../../../types/baseObj';
 import { SearchHeaderInput } from './SearchHeaderInput';
 import { testIds } from '../../../core/testIds';
 
-let initialized = false;
 const DEFAULT_DEBOUNCE_DELAY = 700; // In milliseconds
 
 const SearchHeader = ({
@@ -17,18 +16,10 @@ const SearchHeader = ({
                         inputProps,
                         initialState,
                         initialExpanded = true,
-                        prePopulated
                       }: ISearchHeaderProps) => {
   const theme = useTheme();
   const [debounceValues, setDebounceValues] = useState(params);
   const [expanded, setExpanded] = useState(initialExpanded);
-
-  useEffect(() => {
-    if (prePopulated && !initialized) {
-      setDebounceValues(params);
-      initialized = true;
-    }
-  }, [prePopulated, params]);
 
   const toggleExpand = useCallback(() => setExpanded(prev => !prev), []);
 

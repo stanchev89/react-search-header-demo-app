@@ -21,11 +21,10 @@ const Users = () => {
 
   return (
     <FullWidthColumnFlexbox>
-
-      <SearchHeader initialState={initialState} params={state} setParams={setState} inputProps={inputProps}
-                    prePopulated={isPrePopulated}
-      />
-
+      {
+        isPrePopulated &&
+        <SearchHeader initialState={initialState} params={state} setParams={setState} inputProps={inputProps}/>
+      }
       <DataListWithPagination data={data} isLoading={isLoading} page={state._page} limit={state._limit}
                               onChange={setState}
       />

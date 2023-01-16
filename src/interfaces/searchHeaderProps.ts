@@ -8,7 +8,6 @@ export interface ISearchHeaderProps<T extends BaseObj = any> {
   setParams: Dispatch<SetStateAction<T>>;
   inputProps: ISearchHeaderInputProps[];
   initialExpanded?: boolean;
-  prePopulated?: boolean;
 }
 
 export interface ISearchHeaderInputProps<T = string> {

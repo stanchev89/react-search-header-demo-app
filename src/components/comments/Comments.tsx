@@ -21,7 +21,7 @@ const initialState = getStateFromInputProps<RequestParams<IComment>>(inputProps)
 const Comments = () => {
   const [state, setState] = useState(initialState);
   const { queryParamState, isPrePopulated } = useQueryParamState({ 
-    state, 
+    state,
     setState,
     parser: {
       _limit: (value: string) => DEFAULT_SIZE_OPTIONS.find(option => option === +value) 
@@ -32,11 +32,10 @@ const Comments = () => {
 
   return (
     <FullWidthColumnFlexbox>
-      
-      <SearchHeader initialState={initialState} params={state} setParams={setState} inputProps={inputProps}
-                    prePopulated={isPrePopulated}
-      />
-
+      {
+        isPrePopulated &&
+        <SearchHeader initialState={initialState} params={state} setParams={setState} inputProps={inputProps}/>
+      }
       <DataListWithPagination data={data} isLoading={isLoading} page={state._page} limit={state._limit}
                               onChange={setState}
       />
