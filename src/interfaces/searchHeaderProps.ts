@@ -2,11 +2,11 @@ import { BaseObj } from '../types/baseObj';
 import { Dispatch, SetStateAction } from 'react';
 import { SxProps } from '@mui/material';
 
-export interface ISearchHeaderProps<T extends BaseObj = any> {
+export interface ISearchHeaderProps<T extends BaseObj = {}> {
   initialState: T;
   params: T;
   setParams: Dispatch<SetStateAction<T>>;
-  inputProps: ISearchHeaderInputProps[];
+  inputProps: ISearchHeaderInputProps<keyof T>[];
   initialExpanded?: boolean;
 }
 

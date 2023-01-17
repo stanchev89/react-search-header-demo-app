@@ -56,7 +56,7 @@ const DataListWithPagination = ({ isLoading, data, limit, page, onChange }: IPro
           </FlexBox>
 
           <ViewportListRender list={data.list} ListItemComponent={ListItem} onClick={onItemClickHandler}/>
-
+          
           {/*Rendering without optimisations*/}
           {/*  data.list.map(item => (*/}
           {/*    <Box key={item.id} onClick={() => onItemClickHandler(item)}>*/}

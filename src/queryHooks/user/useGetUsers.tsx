@@ -12,13 +12,13 @@ interface IProps extends IBaseUseQueryProps<IListResponse<IUser>> {
   params: RequestParams<IUserBase>;
 }
 
-export const useGetUsers = ({ params, ...props }: IProps) => {
+export const useGetUsers = ({ params, enabled,  ...props }: IProps) => {
   return useQuery({
     queryKey: [GET_USERS_QUERY_KEY, params],
     queryFn: () => JsonPlaceholderService.getUsers(params),
     refetchOnWindowFocus: false,
     keepPreviousData: true,
-    enabled: !!Object.keys(params).length,
+    enabled: !!Object.keys(params).length && (enabled ?? true),
     onError: (err: AxiosError) => {
       alert(err.message);
       props?.onError?.(err);

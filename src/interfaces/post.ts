@@ -1,4 +1,6 @@
-export interface IPost {
+import { BaseObj } from '../types/baseObj';
+
+export interface IPost extends BaseObj{
   id: number;
   userId: number;
   title: string;

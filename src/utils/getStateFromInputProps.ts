@@ -3,7 +3,7 @@ import { RequestParams } from '../types/requestParams';
 import { BaseObj } from '../types/baseObj';
 import { DEFAULT_SIZE_OPTIONS } from '../components/common/AppPaginationWithSize';
 
-export const getStateFromInputProps = <T extends BaseObj>(inputProps: ISearchHeaderInputProps[], withPagination = true): RequestParams<T> => {
+export const getStateFromInputProps = <T extends BaseObj>(inputProps: ISearchHeaderInputProps<keyof T>[], withPagination = true): RequestParams<T> => {
   return inputProps.reduce((acc: RequestParams<T>, cur: ISearchHeaderInputProps<keyof T>) => {
     acc[cur.name] = '' as any;
     return acc;

@@ -16,42 +16,45 @@ const SearchHeader = ({
                         inputProps,
                         initialState,
                         initialExpanded = true,
-                      }: ISearchHeaderProps) => {
+                      }: ISearchHeaderProps<any>) => {
   const theme = useTheme();
   const [debounceValues, setDebounceValues] = useState(params);
+  const [isDebounceTyping, setIsDebounceTyping] = useState<string | null>(null);
   const [expanded, setExpanded] = useState(initialExpanded);
-
   const toggleExpand = useCallback(() => setExpanded(prev => !prev), []);
-
-  const debounceHandler = useDebounceCallback({
-    delay: DEFAULT_DEBOUNCE_DELAY,
-    callback: (change: BaseObj) => setParams((prev: BaseObj) => ({ ...prev, _page: 1, ...change })),
-  });
 
   const clearFilters = useCallback(() => {
     setDebounceValues(initialState);
     setParams(initialState);
   }, [setParams, initialState]);
 
+  const debounceInputChangeHandler = useDebounceCallback({
+    delay: DEFAULT_DEBOUNCE_DELAY,
+    callback: (change: BaseObj) => {
+      setParams((prev: BaseObj) => ({ ...prev, ...change, _page: 1 }));
+      setIsDebounceTyping(null);
+    },
+  });
+
   const handleDebounceInputChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+    setIsDebounceTyping(name);
     setDebounceValues((prev: BaseObj) => ({ ...prev, [name]: value }));
-    debounceHandler({ [name]: value });
-  }, [setDebounceValues, debounceHandler]);
+    debounceInputChangeHandler({ ...params, [name]: value });
+  }, [setDebounceValues, debounceInputChangeHandler, params]);
 
-  const handleDebounceNumberInputChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+  const handleNumberInputChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     const { name, valueAsNumber } = e.target;
     const parsedVal = isNaN(valueAsNumber) ? '' : valueAsNumber;
     if (parsedVal && parsedVal < 0) {return; }
-    setDebounceValues((prev: BaseObj) => ({ ...prev, [name]: parsedVal }));
-    debounceHandler({ [name]: parsedVal });
-  }, [setDebounceValues, debounceHandler]);
+    handleDebounceInputChange({ target: { name, value: parsedVal } } as ChangeEvent<HTMLInputElement>);
+  }, [handleDebounceInputChange]);
 
-  const handleInputChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+  const handleSelectInputChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setParams((prev: BaseObj) => ({ ...prev, [name]: value }));
   }, [setParams]);
-  
+
   return (
     <FullWidthColumnFlexbox position={'relative'} alignItems={'flex-start'} p={2} pb={expanded ? 6 : 2}
                             boxShadow={expanded ? theme.shadows[2] : 'none'} borderRadius={theme.shape.borderRadius}
@@ -88,24 +91,28 @@ const SearchHeader = ({
               {
                 inputProps.map(input => (
                   <SearchHeaderInput
-                    key={input.name + input.label} name={input.name} label={input.label} select={!!input.select}
+                    key={input.name.toString() + input.label} name={input.name.toString()} label={input.label}
+                    select={!!input.select}
                     aria-label={input.label}
                     onChange={
                       input.select
-                        ? handleInputChange
+                        ? handleSelectInputChange
                         : input.isNumber
-                          ? handleDebounceNumberInputChange
+                          ? handleNumberInputChange
                           : handleDebounceInputChange
                     }
-                    value={input.select
-                      ? input.select.list.length ? params[input.name] : ''
-                      : debounceValues[input.name] ?? ''
+                    value={
+                      input.select
+                        ? input.select.list.length ? params[input.name] : ''
+                        : isDebounceTyping === input.name
+                          ? debounceValues[input.name] ?? ''
+                          : params[input.name] ?? ''
                     }
                     isNumber={input.isNumber}
                   >
                     {
                       !!input.select && input.select.list.map(selectVal => (
-                        <MenuItem key={input.name + input.select!.getValue(selectVal)}
+                        <MenuItem key={input.name.toString() + input.select!.getValue(selectVal)}
                                   value={input.select!.getValue(selectVal)}
                         >
                           {input.select!.getLabel(selectVal)}

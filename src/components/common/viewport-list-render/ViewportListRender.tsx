@@ -17,7 +17,7 @@ const ViewportListRender = ({ list, ListItemComponent, onClick }: IViewportListR
     <BoxFullWidth height={'100%'}>
       {
         list.map((item, index) => (
-          <ListItemWrapper key={item.id} elementIndex={index} onClick={() => onClick?.(item)} minHeight={230}
+          <ListItemWrapper key={item.id.toString()} elementIndex={index} onClick={() => onClick?.(item)} minHeight={230}
                            setVisibleIndex={setLastVisibleIndex} lastVisibleIndex={lastVisibleIndex}
           >
             <ListItemComponent item={item}/>

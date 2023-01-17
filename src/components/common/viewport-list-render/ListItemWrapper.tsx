@@ -11,7 +11,7 @@ interface IListItemWrapperProps {
   minHeight?: number | string
 }
 
-const RENDER_ELEMENTS_BUFFER = 10;
+const BUFFER_RENDERED_ITEMS = 10;
 
 const ListItemWrapper = ({
                            children,
@@ -25,7 +25,7 @@ const ListItemWrapper = ({
   const isInViewport = useIsInViewport(ref);
 
   const isInBufferZone = useMemo(() =>
-      Math.abs(lastVisibleIndex - elementIndex) <= RENDER_ELEMENTS_BUFFER,
+      Math.abs(lastVisibleIndex - elementIndex) <= BUFFER_RENDERED_ITEMS,
     [elementIndex, lastVisibleIndex]
   );
 

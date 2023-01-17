@@ -1,5 +1,6 @@
+import { BaseObj } from '../types/baseObj';
 
-export interface IComment {
+export interface IComment extends BaseObj{
   id: number;
   postId: number;
   name: string;

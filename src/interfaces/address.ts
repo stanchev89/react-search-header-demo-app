@@ -1,6 +1,6 @@
 import { BaseObj } from '../types/baseObj';
 
-export interface IAddress extends BaseObj {
+export interface IAddress {
   street: string;
   suite: string;
   city: string;

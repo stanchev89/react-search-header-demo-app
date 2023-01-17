@@ -1,4 +1,6 @@
-export interface ITodo {
+import { BaseObj } from '../types/baseObj';
+
+export interface ITodo extends BaseObj{
   id: number;
   userId: number;
   title: string;

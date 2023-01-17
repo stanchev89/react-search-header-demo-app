@@ -12,23 +12,20 @@ import EntityDetailsModal from '../common/EntityDetailsModal';
 import useGetUserDetails from '../../queryHooks/user/useGetUserDetails';
 
 const inputProps: ISearchHeaderInputProps<keyof IUserBase>[] = generateSearchInputProps(userBaseKeys, { numberKeys: ['id'] });
-const initialState = getStateFromInputProps(inputProps);
+const initialState = getStateFromInputProps<IUserBase>(inputProps);
 
 const Users = () => {
   const [state, setState] = useState(initialState);
-  const { queryParamState, isPrePopulated } = useQueryParamState({ state, setState, });
-  const { data, isLoading } = useGetUsers({ params: queryParamState });
+  const { queryParamState, isPrePopulated } = useQueryParamState({ state, setState });
+  const { data, isFetching } = useGetUsers({ params: queryParamState, enabled: isPrePopulated });
 
   return (
     <FullWidthColumnFlexbox>
-      {
-        isPrePopulated &&
-        <SearchHeader initialState={initialState} params={state} setParams={setState} inputProps={inputProps}/>
-      }
-      <DataListWithPagination data={data} isLoading={isLoading} page={state._page} limit={state._limit}
+      <SearchHeader initialState={initialState} params={state} setParams={setState} inputProps={inputProps}/>
+      <DataListWithPagination data={data} isLoading={isFetching} page={state._page} limit={state._limit}
                               onChange={setState}
       />
-      
+
       <EntityDetailsModal useGetDetailsQuery={useGetUserDetails}/>
 
     </FullWidthColumnFlexbox>

@@ -12,13 +12,13 @@ interface IProps extends IBaseUseQueryProps<IListResponse<IPost>> {
   params: RequestParams<IPost>;
 }
 
-export const useGetPosts = ({ params, ...props }: IProps) => {
+export const useGetPosts = ({ params, enabled,  ...props }: IProps) => {
   return useQuery({
     queryKey: [GET_POSTS_QUERY_KEY, params],
     queryFn: () => JsonPlaceholderService.getPosts(params),
     refetchOnWindowFocus: false,
     keepPreviousData: true,
-    enabled: !!Object.keys(params).length,
+    enabled: !!Object.keys(params).length && (enabled ?? true),
     onError: (err: AxiosError) => {
       alert(err.message);
       props?.onError?.(err);

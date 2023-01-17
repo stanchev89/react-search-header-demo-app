@@ -3,18 +3,7 @@ import { fireEvent, render, renderHook } from '@testing-library/react';
 import SearchHeader from './SearchHeader';
 import { getStateFromInputProps } from '../../../utils/getStateFromInputProps';
 import { testIds } from '../../../core/testIds';
-import { ReactNode, useState } from 'react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { BrowserRouter } from 'react-router-dom';
-
-const queryClient = new QueryClient();
-const wrapper = ({ children }: { children: ReactNode }) => (
-  <BrowserRouter>
-    <QueryClientProvider client={queryClient}>
-      {children}
-    </QueryClientProvider>
-  </BrowserRouter>
-);
+import { useState } from 'react';
 
 const selectValues = [0, 1, 2, 3, 4, 5];
 
@@ -47,17 +36,13 @@ const useTestState = (initialValue: any) => {
 const initialState = getStateFromInputProps(inputProps, false);
 
 describe('SearchHeader component', async () => {
-  const { result, rerender } = renderHook(() => useTestState(initialState));
+  const { result } = renderHook(() => useTestState(initialState));
   const { state, setState } = result.current;
-  
-  const triggerSetState = (cb: (prev: any) => any) => {
-    setState(cb);
-    rerender();
-  };
+
 
   it('should render SearchHeader component with proper input fields', () => {
     const { getByTestId, getAllByLabelText } = render(
-      <SearchHeader initialState={initialState} params={state} setParams={triggerSetState} inputProps={inputProps}/>
+      <SearchHeader initialState={initialState} params={state} setParams={setState} inputProps={inputProps}/>
     );
     expect(getByTestId(testIds.searchHeader)).toBeInTheDocument();
     expect(getAllByLabelText('String')[0]).toBeInTheDocument();
@@ -67,7 +52,7 @@ describe('SearchHeader component', async () => {
 
   it('should be unable to type string value or negative number into number input field', () => {
     const { container } = render(
-      <SearchHeader initialState={initialState} params={state} setParams={triggerSetState} inputProps={inputProps}/>
+      <SearchHeader initialState={initialState} params={state} setParams={setState} inputProps={inputProps}/>
     );
     const numberInput = container.querySelector('input[name="number"]') as HTMLInputElement;
     fireEvent.change(numberInput, { target: { value: 'abc' } });
@@ -81,11 +66,11 @@ describe('SearchHeader component', async () => {
   it('select field label should be adequate to selected value', () => {
     const testValue = selectValues[2];
     const { container } = render(
-      <SearchHeader initialState={initialState} params={{ select: testValue }} setParams={triggerSetState}
+      <SearchHeader initialState={initialState} params={{ select: testValue }} setParams={setState}
                     inputProps={inputProps}/>
     );
     const muiSelectValue = container.querySelector('.MuiSelect-select') as HTMLInputElement;
     expect(muiSelectValue.textContent).toBe(`The number is ${testValue}`);
   });
-  
+
 });

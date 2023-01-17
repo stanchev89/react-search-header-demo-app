@@ -26,18 +26,15 @@ const initialState = getStateFromInputProps<ITodo>(inputProps);
 const Todos = () => {
   const [state, setState] = useState(initialState);
   const { queryParamState, isPrePopulated } = useQueryParamState({ state, setState, });
-  const { data, isLoading } = useGetTodos({ params: queryParamState });
+  const { data, isFetching } = useGetTodos({ params: queryParamState, enabled: isPrePopulated });
 
   return (
     <FullWidthColumnFlexbox>
-      {
-        isPrePopulated &&
-        <SearchHeader initialState={initialState} params={state} setParams={setState} inputProps={inputProps}/>
-      }
-      <DataListWithPagination data={data} isLoading={isLoading} page={state._page} limit={state._limit}
+      <SearchHeader initialState={initialState} params={state} setParams={setState} inputProps={inputProps}/>
+      <DataListWithPagination data={data} isLoading={isFetching} page={state._page} limit={state._limit}
                               onChange={setState}
       />
-      
+
       <EntityDetailsModal useGetDetailsQuery={useGetTodoDetails}/>
 
     </FullWidthColumnFlexbox>

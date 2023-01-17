@@ -12,13 +12,13 @@ interface IProps extends IBaseUseQueryProps<IListResponse<ITodo>> {
   params: RequestParams<ITodo>;
 }
 
-export const useGetTodos = ({ params, ...props }: IProps) => {
+export const useGetTodos = ({ params, enabled, ...props }: IProps) => {
   return useQuery({
     queryKey: [GET_TODOS_QUERY_KEY, params],
     queryFn: () => JsonPlaceholderService.getTodos(params),
     refetchOnWindowFocus: false,
     keepPreviousData: true,
-    enabled: !!Object.keys(params).length,
+    enabled: !!Object.keys(params).length && (enabled ?? true),
     onError: (err: AxiosError) => {
       alert(err.message);
       props?.onError?.(err);

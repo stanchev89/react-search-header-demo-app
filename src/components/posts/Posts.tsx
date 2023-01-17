@@ -14,23 +14,20 @@ import useGetPostDetails from '../../queryHooks/post/useGetPostDetails';
 const inputProps: ISearchHeaderInputProps<keyof IPost>[] = generateSearchInputProps(postKeys, {
   numberKeys: ['id', 'userId']
 });
-const initialState = getStateFromInputProps(inputProps);
+const initialState = getStateFromInputProps<IPost>(inputProps);
 
 const Posts = () => {
   const [state, setState] = useState(initialState);
   const { queryParamState, isPrePopulated } = useQueryParamState({ state, setState, });
-  const { data, isLoading } = useGetPosts({ params: queryParamState });
+  const { data, isFetching } = useGetPosts({ params: queryParamState, enabled: isPrePopulated });
 
   return (
     <FullWidthColumnFlexbox>
-      {
-        isPrePopulated &&
-        <SearchHeader initialState={initialState} params={state} setParams={setState} inputProps={inputProps}/>
-      }
-      <DataListWithPagination data={data} isLoading={isLoading} page={state._page} limit={state._limit}
+      <SearchHeader initialState={initialState} params={state} setParams={setState} inputProps={inputProps}/>
+      <DataListWithPagination data={data} isLoading={isFetching} page={state._page} limit={state._limit}
                               onChange={setState}
       />
-      
+
       <EntityDetailsModal useGetDetailsQuery={useGetPostDetails}/>
       
     </FullWidthColumnFlexbox>

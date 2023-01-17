@@ -1,5 +1,4 @@
 import { UseQueryResult } from '@tanstack/react-query';
-import { BaseObj } from '../../types/baseObj';
 import { useSearchParams } from 'react-router-dom';
 import { useCallback, useMemo } from 'react';
 import { IBaseUseQueryProps } from '../../interfaces/baseQueryProps';
@@ -10,7 +9,7 @@ import { Close } from '@mui/icons-material';
 import { testIds } from '../../core/testIds';
 
 interface IProps {
-  useGetDetailsQuery: (params: IBaseUseQueryProps<any> & { id: number }) => UseQueryResult<BaseObj, any>;
+  useGetDetailsQuery: (params: IBaseUseQueryProps<any> & { id: number }) => UseQueryResult<any, any>;
 }
 export const DETAILS_MODAL_QUERY_PARAM = '_details';
 

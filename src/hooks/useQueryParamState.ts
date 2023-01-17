@@ -19,7 +19,7 @@ export const useQueryParamState = <T extends RequestParams>({
                                                               arrays = [],
                                                             }: IUseQueryStateProps<T>): { queryParamState: T, isPrePopulated: boolean } => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [prePopulated, setPrePopulated] = useState(false);
+  const [isPrePopulated, setIsPrePopulated] = useState(false);
 
   // Init pre-populate query params into the state
   useEffect(() => {
@@ -28,17 +28,17 @@ export const useQueryParamState = <T extends RequestParams>({
         setState(prev => ({ ...prev, [key]: parser[key] ? parser[key](val) : getSerializedValue(val, state[key]) }));
       }
     });
-    setPrePopulated(true);
+    setIsPrePopulated(true);
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const diff = useMemo(() => Object.entries(prePopulated ? state : {}).reduce((acc: BaseObj, [key, val]) => {
+  const diff = useMemo(() => Object.entries(isPrePopulated ? state : {}).reduce((acc: BaseObj, [key, val]) => {
     const queryParamVal = searchParams.get(key);
     if ((queryParamVal !== val?.toString()) || (queryParamVal && val === '')) {
       acc[key] = val ? val.toString().trim() : val;
     }
     return acc;
-  }, {}), [searchParams, state, prePopulated]);
+  }, {}), [searchParams, state, isPrePopulated]);
 
 
   const handleChange = useCallback((updates: [string, any][]) => {
@@ -53,18 +53,19 @@ export const useQueryParamState = <T extends RequestParams>({
   }, [diff, handleChange]);
 
   return useMemo<{ queryParamState: T, isPrePopulated: boolean }>(() => ({
-    queryParamState: Object.keys(state).reduce((acc: T, key) => {
-      const rawValue = state[key];
-      if (!['', null, undefined].includes(rawValue)) {
-        const value = wildcards.includes(key) ? state[key] + '%' : state[key];
-        acc[key as keyof T] = arrays.includes(key) && typeof value === 'string' 
-          ? value.split(',').map((v) => v.trim()) 
-          : typeof value === 'string' ? value.trim() : value;
-      }
-      return acc;
-    }, {} as T),
-    isPrePopulated: prePopulated
-  }), [state, wildcards, arrays, prePopulated]);
+      queryParamState: Object.getOwnPropertyNames(state).reduce((acc: T, key: keyof T) => {
+        const rawValue = state[key];
+        if (rawValue !== '') {
+          const value = wildcards.includes(key) ? state[key] + '%' : state[key];
+          (acc as any)[key] = arrays.includes(key) && typeof value === 'string'
+            ? value.split(',').map((v) => v.trim())
+            : typeof value === 'string' ? value.trim() : value;
+        }
+        return acc;
+      }, {} as T),
+      isPrePopulated: isPrePopulated
+    }
+  ), [state, isPrePopulated, wildcards, arrays]);
 };
 
 function getSerializedValue(value: string, stateValue: any) {

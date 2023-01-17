@@ -10,7 +10,7 @@ import * as path from 'path';
 export default defineConfig({
   plugins: [react(), eslintPlugin({
     useEslintrc: true,
-    include: ['src/**/*.{ts,tsx}'],
+    include: ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx"],
   })],
   test: {
     globals: true,

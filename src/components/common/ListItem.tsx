@@ -24,7 +24,7 @@ const ListItem = ({ item }: { item: BaseObj }) => {
           typeof item[key] !== 'object' &&
           <FlexBox key={key + item[key].toString()} alignItems={'center'}>
             <Tooltip title={'Copy'} placement={'left'}>
-              <IconButton onClick={(e) => copyToClipBoardHandler(e, item[key])}>
+              <IconButton onClick={(e) => copyToClipBoardHandler(e, item[key].toString())}>
                 <ContentCopy sx={{ width: 16 }}/>
               </IconButton>
             </Tooltip>

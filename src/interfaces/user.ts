@@ -1,16 +1,18 @@
 import { IAddress } from './address';
+import { BaseObj } from '../types/baseObj';
 
-export interface IUserBase {
+interface UserBase {
   id: number;
   name: string;
   username: string;
   email: string;
   phone: string;
   website: string;
-  
 }
 
-export interface IUser extends IUserBase {
+export interface IUserBase extends UserBase, BaseObj {}
+
+export interface IUser extends UserBase {
   address: IAddress;
   company: {
     name: string;
@@ -18,5 +20,6 @@ export interface IUser extends IUserBase {
     bs: string;
   };
 }
+
 
 export const userBaseKeys: (keyof IUserBase)[] = ['id', 'name', 'username', 'email', 'phone', 'website'];

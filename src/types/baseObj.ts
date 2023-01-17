@@ -1,1 +1,1 @@
-export type BaseObj = { [key: string]: any }
+export type BaseObj = { [key: string]: string | number | boolean }
