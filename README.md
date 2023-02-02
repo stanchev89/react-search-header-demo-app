@@ -11,6 +11,8 @@ Key parts of this functionality:
 Another topic is how we can optimise the rendering of a long list of data with our ViewportListRender 
 custom component.
 
+A quite same functionality with Angular is here: https://github.com/stanchev89/angular-search-header-demo-app
+
 ## Technologies used:
 * React
 * TypeScript
